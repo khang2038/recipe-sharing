@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class RecipeServiceService {
-  private baseUrl = 'http://localhost:5454';
+  private baseUrl = 'http://localhost:9090';
 
   constructor(private http: HttpClient) {}
 
@@ -66,10 +66,28 @@ export class RecipeServiceService {
       );
   }
 
-  deleteRecipes(recipe: any): Observable<any> {
+  deleteRecipes(id: any): Observable<any> {
     const headers = this.getHeader();
     return this.http
-      .post(`${this.baseUrl}/api/recipe/${recipe.id}`, recipe, { headers })
+      .delete(`${this.baseUrl}/api/recipe/${id}`, { headers })
+      .pipe(
+        tap((deletedRecipe: any) => {
+          const currentState = this.recipeSubject.value;
+          const updatedRecipes = currentState.recipes.filter(
+            (item: any) => item.id !== id
+          );
+          this.recipeSubject.next({
+            ...currentState,
+            recipes: updatedRecipes,
+          });
+        })
+      );
+  }
+
+  likeRecipes(id: any): Observable<any> {
+    const headers = this.getHeader();
+    return this.http
+      .post(`${this.baseUrl}/api/recipe/${id}/like`, { headers })
       .pipe(
         tap((updatedRecipe: any) => {
           const currentState = this.recipeSubject.value;

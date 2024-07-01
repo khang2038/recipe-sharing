@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthServiceService {
-  private baseUrl = 'http://localhost:5454';
+  private baseUrl = 'http://localhost:9090';
 
   constructor(private http: HttpClient) {}
 
@@ -28,7 +28,7 @@ export class AuthServiceService {
     });
 
     return this.http
-      .post<any>(`${this.baseUrl}/api/auth/signup`, { header })
+      .post<any>(`${this.baseUrl}/api/users/profile`, { header })
       .pipe(
         tap((user) => {
           const currentState = this.authSubject.value;
