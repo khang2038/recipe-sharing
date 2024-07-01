@@ -33,30 +33,54 @@ export class RecipeServiceService {
     );
   }
 
-  createRecipes(recipe:any): Observable<any> {
+  createRecipes(recipe: any): Observable<any> {
     const headers = this.getHeader();
-    return this.http.post(`${this.baseUrl}/api/recipe`,recipe, { headers }).pipe(
-      tap((newRecipes) => {
-        const currentState = this.recipeSubject.value;
-        this.recipeSubject.next({
-          ...currentState,
-          recipes: [newRecipes, ...currentState.recipes],
-        });
-      })
-    );
+    return this.http
+      .post(`${this.baseUrl}/api/recipe`, recipe, { headers })
+      .pipe(
+        tap((newRecipes) => {
+          const currentState = this.recipeSubject.value;
+          this.recipeSubject.next({
+            ...currentState,
+            recipes: [newRecipes, ...currentState.recipes],
+          });
+        })
+      );
   }
 
-  updateRecipes(recipe:any): Observable<any> {
+  updateRecipes(recipe: any): Observable<any> {
     const headers = this.getHeader();
-    return this.http.post(`${this.baseUrl}/api/recipe/${recipe.id}`, recipe,{ headers }).pipe(
-      tap((updatedRecipe:any) => {
-        const currentState = this.recipeSubject.value;
-        const updatedRecipes = currentState.recipes.map((item:any) => item.id === updatedRecipe.id? updatedRecipe:item )
-        this.recipeSubject.next({
-          ...currentState,
-          recipes: updatedRecipes,
-        });
-      })
-    );
+    return this.http
+      .post(`${this.baseUrl}/api/recipe/${recipe.id}`, recipe, { headers })
+      .pipe(
+        tap((updatedRecipe: any) => {
+          const currentState = this.recipeSubject.value;
+          const updatedRecipes = currentState.recipes.map((item: any) =>
+            item.id === updatedRecipe.id ? updatedRecipe : item
+          );
+          this.recipeSubject.next({
+            ...currentState,
+            recipes: updatedRecipes,
+          });
+        })
+      );
+  }
+
+  deleteRecipes(recipe: any): Observable<any> {
+    const headers = this.getHeader();
+    return this.http
+      .post(`${this.baseUrl}/api/recipe/${recipe.id}`, recipe, { headers })
+      .pipe(
+        tap((updatedRecipe: any) => {
+          const currentState = this.recipeSubject.value;
+          const updatedRecipes = currentState.recipes.map((item: any) =>
+            item.id === updatedRecipe.id ? updatedRecipe : item
+          );
+          this.recipeSubject.next({
+            ...currentState,
+            recipes: updatedRecipes,
+          });
+        })
+      );
   }
 }
