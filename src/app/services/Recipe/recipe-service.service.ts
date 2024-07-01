@@ -69,9 +69,13 @@ export class RecipeServiceService {
   deleteRecipes(id: any): Observable<any> {
     const headers = this.getHeader();
     return this.http
-      .delete(`${this.baseUrl}/api/recipe/${id}`, { headers })
+      .delete(`${this.baseUrl}/api/recipe/${id}`, {
+        headers,
+        responseType: 'text',
+      })
       .pipe(
-        tap((deletedRecipe: any) => {
+        tap((response: string) => {
+          console.log(response);
           const currentState = this.recipeSubject.value;
           const updatedRecipes = currentState.recipes.filter(
             (item: any) => item.id !== id
